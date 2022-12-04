@@ -1,4 +1,4 @@
-﻿var lines = File.ReadLines(@"C:/tmp/aoc/2/input.txt");
+﻿var lines = File.ReadLines("input.txt");
 var strategy = new List<RoundStrategy>();
 
 foreach (var line in lines)

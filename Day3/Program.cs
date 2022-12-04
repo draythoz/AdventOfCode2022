@@ -1,4 +1,4 @@
-﻿var lines = File.ReadLines(@"C:/tmp/aoc/3/input.txt");
+﻿var lines = File.ReadLines("input.txt");
 var sacks = new List<Rucksack>();
 foreach (var line in lines)
 {

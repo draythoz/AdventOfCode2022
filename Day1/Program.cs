@@ -1,4 +1,4 @@
-﻿var lines = File.ReadLines(@"C:/tmp/aoc/1/input.txt");
+﻿var lines = File.ReadLines("input.txt");
 var elfCalories = new List<int>();
 
 var calorieSum = 0;

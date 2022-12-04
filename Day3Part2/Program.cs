@@ -52,7 +52,6 @@ char GetOverlapItem(Rucksack sack)
             return item;
 
     throw new ArgumentException();
-
 }
 
 char GetBadgeItem(ElfGroup elfGroup)

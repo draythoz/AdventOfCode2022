@@ -10,7 +10,7 @@ foreach (var line in lines)
     var elf1Split = elfSplitLine[0].Split('-');
     var elf1Min = Convert.ToInt32(elf1Split[0]);
     var elf1Max = Convert.ToInt32(elf1Split[1]);
-    
+
     var elf2Split = elfSplitLine[1].Split('-');
     var elf2Min = Convert.ToInt32(elf2Split[0]);
     var elf2Max = Convert.ToInt32(elf2Split[1]);

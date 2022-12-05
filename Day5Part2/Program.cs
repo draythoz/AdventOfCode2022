@@ -30,11 +30,11 @@ for (var x = postInitializationIndex; x < lines.Length; x++)
     var sourceStack = int.Parse(splitInstructions[3]) - 1; //-1 to match up to the initialization array of Stacks
     var destinationStack = int.Parse(splitInstructions[5]) - 1; //same reason
 
-    for (var i = 0; i < numberStacksToMove; i++)
-    {
-        var item = stacks[sourceStack].Pop();
-        stacks[destinationStack].Push(item);
-    }
+    //The main difference from the previous code is that we now push from the source stack to a tempstack
+    //Then we pop from the tempStack onto the destinationStack.
+    var tempStack = new Stack<char>();
+    for (var i = 0; i < numberStacksToMove; i++) tempStack.Push(stacks[sourceStack].Pop());
+    while (tempStack.Count > 0) stacks[destinationStack].Push(tempStack.Pop());
 }
 
 foreach (var stack in stacks) Console.Write(stack.Peek());

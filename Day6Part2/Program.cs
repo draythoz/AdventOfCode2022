@@ -23,7 +23,7 @@ Console.WriteLine(characterIndex);
 
 bool IsFullSet(char[] foobar)
 {
-    if (foobar.ToHashSet().Count() == sizeOfStartWindow) return true;
+    if (foobar[0] != '!' && foobar.ToHashSet().Count() == sizeOfStartWindow) return true;
 
     return false;
 }

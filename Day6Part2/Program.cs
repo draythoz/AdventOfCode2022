@@ -15,27 +15,15 @@ do
     Array.Copy(startWindow, 1, startWindow, 0, startWindow.Length - 1);
     startWindow[sizeOfStartWindow - 1] = ch;
     characterIndex++;
-} while (!reader.EndOfStream && !AllUniqueChars(startWindow));
+} while (!reader.EndOfStream && !IsFullSet(startWindow));
 
 reader.Dispose();
 Console.WriteLine(startWindow);
 Console.WriteLine(characterIndex);
 
-bool AllUniqueChars(char[] stringToTest)
+bool IsFullSet(char[] foobar)
 {
-    if (stringToTest[0] == '!') return false;
+    if (foobar.ToHashSet().Count() == sizeOfStartWindow) return true;
 
-    for (var i = 0; i < stringToTest.Length; i++)
-    {
-        var currentChar = stringToTest[i];
-        for (var j = 0; j < stringToTest.Length; j++)
-        {
-            if (i == j)
-                continue;
-
-            if (currentChar == stringToTest[j]) return false;
-        }
-    }
-
-    return true;
+    return false;
 }

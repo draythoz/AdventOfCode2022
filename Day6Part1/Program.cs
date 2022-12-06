@@ -1,5 +1,5 @@
 ﻿char ch;
-var startWindow = new char[4] {default(char),default(char),default(char),default(char)};
+var startWindow = new char[4] { default, default, default, default };
 StreamReader reader;
 reader = new StreamReader(@"input.txt");
 var characterIndex = 0;
@@ -18,11 +18,11 @@ Console.WriteLine(characterIndex);
 bool AllUniqueChars(char[] stringToTest)
 {
     if (stringToTest[0] == default(char)) return false;
-    
-    for (int i = 0; i < stringToTest.Length; i++)
+
+    for (var i = 0; i < stringToTest.Length; i++)
     {
         var currentChar = stringToTest[i];
-        for (int j = 0; j < stringToTest.Length; j++)
+        for (var j = 0; j < stringToTest.Length; j++)
         {
             if (i == j)
                 continue;

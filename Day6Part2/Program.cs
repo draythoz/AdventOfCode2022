@@ -2,8 +2,9 @@
 
 char ch;
 const int sizeOfStartWindow = 14;
+const char initializationChar = '!';
 var sb = new StringBuilder();
-for (var i = 0; i < sizeOfStartWindow; i++) sb.Append('!');
+for (var i = 0; i < sizeOfStartWindow; i++) sb.Append(initializationChar);
 var startWindow = sb.ToString().ToCharArray();
 
 StreamReader reader;
@@ -23,7 +24,7 @@ Console.WriteLine(characterIndex);
 
 bool IsFullSet(char[] foobar)
 {
-    if (foobar[0] != '!' && foobar.ToHashSet().Count() == sizeOfStartWindow) return true;
+    if (foobar[0] != initializationChar && foobar.ToHashSet().Count() == sizeOfStartWindow) return true;
 
     return false;
 }

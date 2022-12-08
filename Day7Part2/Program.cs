@@ -1,4 +1,6 @@
 ﻿var lines = File.ReadLines("input.txt");
+var sizeOfSystem = 70000000;
+var sizeNeededForProgram = 30000000;
 var root = new ElfDirectory("/", null);
 var currentDirectory = root;
 foreach (var line in lines)
@@ -24,7 +26,28 @@ foreach (var line in lines)
 
 var candidateDirectories = new List<ElfDirectory>();
 var sum = GetCandidateDirectoriesSum(root, candidateDirectories);
-Console.WriteLine(sum);
+Console.WriteLine($"The sum of all directories with size less than 100000 is: {sum}");
+
+candidateDirectories = new List<ElfDirectory>();
+var currentFreeSpace = sizeOfSystem - root.Size;
+var spaceNeededToFreeUp = sizeNeededForProgram - currentFreeSpace;
+var directoryToDelete = GetDirectoryToDelete(root, candidateDirectories, spaceNeededToFreeUp);
+Console.WriteLine($"Space needed to free up for the program: {spaceNeededToFreeUp}");
+Console.WriteLine(
+    $"Directory {directoryToDelete.Name} is the smallest directory " +
+    $"that can be deleted with a size of {directoryToDelete.Size}");
+
+ElfDirectory GetDirectoryToDelete(ElfDirectory currentDirectory, List<ElfDirectory> candidateDirectories,
+    int spaceNeeded)
+{
+    if (currentDirectory.Size >= spaceNeeded)
+        candidateDirectories.Add(currentDirectory);
+
+    foreach (var directory in currentDirectory.Directories)
+        GetDirectoryToDelete(directory, candidateDirectories, spaceNeeded);
+
+    return candidateDirectories.OrderBy(c => c.Size).First();
+}
 
 int GetCandidateDirectoriesSum(ElfDirectory currentDirectory, List<ElfDirectory> candidateDirectories,
     int sizeLimit = 100000)

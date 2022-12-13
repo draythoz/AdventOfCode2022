@@ -1,5 +1,6 @@
-﻿var lines = File.ReadLines("input.txt");
-var interestingCycleNumbers = new int[6] { 20, 60, 100, 140, 180, 220 };
+﻿using System.Text;
+
+var lines = File.ReadLines("input.txt");
 var cycles = new List<Cycle> { new(0, 1, 0) };
 var currentX = 1;
 var currentCycle = 1;
@@ -15,17 +16,32 @@ foreach (var line in lines)
         cycles.Add(new Cycle(currentCycle++, currentX, currentX += addToX));
     }
 
-var interestingCycles = new List<Cycle>();
-interestingCycles.AddRange(cycles.Where(c => interestingCycleNumbers.Contains(c.CycleNumber)));
-foreach (var pointOfInterest in interestingCycles)
+var sb = new StringBuilder();
+var drawPosition = 0;
+var drawWindow = UpdateDrawWindow(1);
+
+foreach (var cycle in cycles.Skip(1))
 {
-    Console.WriteLine(
-        $"Cycle Number: {pointOfInterest.CycleNumber} with X startValue: {pointOfInterest.StartX} and X endValue: {pointOfInterest.EndX}");
-    Console.WriteLine($"Signal Strength: {pointOfInterest.CycleNumber * pointOfInterest.StartX}");
+    if (cycle.CycleNumber % 40 == 1)
+    {
+        sb.AppendLine();
+        drawPosition = 0;
+    }
+
+    if (drawWindow.Contains(drawPosition)) sb.Append("#");
+    else sb.Append(".");
+
+    drawPosition++;
+    drawWindow = UpdateDrawWindow(cycle.EndX);
 }
 
-var totalSignalStrength = interestingCycles.Select(c => c.CycleNumber * c.StartX).Sum();
-Console.WriteLine($"Total Signal Strength: {totalSignalStrength}");
+Console.WriteLine(sb.ToString());
+
+int[] UpdateDrawWindow(int xPosition)
+{
+    return new int[3] { xPosition - 1, xPosition, xPosition + 1 };
+}
+
 
 internal class Cycle
 {

@@ -7,10 +7,7 @@ PerformMonkeyBusiness(monkeys, 20);
 
 var top2 = monkeys.OrderByDescending(m => m.ItemsTouched - m.CurrentItems.Count).Take(2);
 
-foreach (var monkey in top2)
-{
-    Console.WriteLine(monkey.ToString());
-}
+foreach (var monkey in top2) Console.WriteLine(monkey.ToString());
 var topBusinessMonkey = top2.First();
 var secondBusinessMonkey = top2.Last();
 var totalMonkeyBusiness = (topBusinessMonkey.ItemsTouched - topBusinessMonkey.CurrentItems.Count) *
@@ -20,39 +17,41 @@ Console.WriteLine($"Total Monkey Business: {totalMonkeyBusiness}");
 
 void PerformMonkeyBusiness(List<Monkey> monkeys, int rounds)
 {
-    for (int round = 1; round <= 20; round++)
+    for (var round = 1; round <= 20; round++)
+    for (var i = 0; i < monkeys.Count; i++)
     {
-        for (var i = 0; i < monkeys.Count; i++)
+        var monkey = monkeys[i];
+        for (var index = 0; index < monkey.CurrentItems.Count; index++)
         {
-            var monkey = monkeys[i];
-            for (var index = 0; index < monkey.CurrentItems.Count; index++)
+            var item = monkey.CurrentItems[index];
+            var newWorryValue = 0;
+            if (monkey.WorryOperation == '^')
             {
-                var item = monkey.CurrentItems[index];
-                var newWorryValue = 0;
-                if (monkey.WorryOperation == '^') newWorryValue = item * item;
-                else
-                {
-                    DataTable dt = new DataTable();
-                    newWorryValue =
-                        int.Parse(dt.Compute($"{item} {monkey.WorryOperation} {monkey.WorryOperationModifier}", "")
-                            .ToString()!);
-                }
-
-                item = (int)(newWorryValue / 3);
-
-                if (item % monkey.DivisibleByModifier == 0)
-                {
-                    monkeys[monkey.DivisibleBySuccessRecipient].CurrentItems.Add(item);
-                    monkeys[monkey.DivisibleBySuccessRecipient].ItemsTouched++;
-                }
-                else
-                {
-                    monkeys[monkey.DivisibleByFailureRecipient].CurrentItems.Add(item);
-                    monkeys[monkey.DivisibleByFailureRecipient].ItemsTouched++;
-                }
+                newWorryValue = item * item;
             }
-            monkey.CurrentItems.Clear();
+            else
+            {
+                var dt = new DataTable();
+                newWorryValue =
+                    int.Parse(dt.Compute($"{item} {monkey.WorryOperation} {monkey.WorryOperationModifier}", "")
+                        .ToString()!);
+            }
+
+            item = newWorryValue / 3;
+
+            if (item % monkey.DivisibleByModifier == 0)
+            {
+                monkeys[monkey.DivisibleBySuccessRecipient].CurrentItems.Add(item);
+                monkeys[monkey.DivisibleBySuccessRecipient].ItemsTouched++;
+            }
+            else
+            {
+                monkeys[monkey.DivisibleByFailureRecipient].CurrentItems.Add(item);
+                monkeys[monkey.DivisibleByFailureRecipient].ItemsTouched++;
+            }
         }
+
+        monkey.CurrentItems.Clear();
     }
 }
 
@@ -65,7 +64,7 @@ List<Monkey> ParseMonkeys(string fileName)
         while (!reader.EndOfStream)
         {
             var line = reader.ReadLine();
-            
+
             if (line.StartsWith("Monkey"))
             {
                 var monkeyId = 0;
@@ -79,15 +78,12 @@ List<Monkey> ParseMonkeys(string fileName)
 
                 //Line 1
                 monkeyId = int.Parse(line[^2].ToString());
-                
+
                 //Line 2
                 line = reader.ReadLine();
-                
+
                 var items = line.Split(":")[1].Split(",");
-                foreach (var item in items)
-                {
-                    monkeyItems.Add(int.Parse(item));
-                }
+                foreach (var item in items) monkeyItems.Add(int.Parse(item));
 
                 //Line 3
                 line = reader.ReadLine();
@@ -103,17 +99,17 @@ List<Monkey> ParseMonkeys(string fileName)
                     var lastValue = line.Substring(line.LastIndexOf(" ") + 1);
                     monkeyOperationValue = int.Parse(lastValue);
                 }
-                
+
                 //Line 4
                 line = reader.ReadLine();
                 var divisibleValue = line.Substring(line.LastIndexOf(" ") + 1);
                 monkeyDivisibleByModifier = int.Parse(divisibleValue);
-                
+
                 //Line 5
                 line = reader.ReadLine();
                 var divisibleSuccessMonkey = line.Substring(line.LastIndexOf(" ") + 1);
                 monkeyDivisibleBySuccessRecipient = int.Parse(divisibleSuccessMonkey);
-                
+
                 //Line 6
                 line = reader.ReadLine();
                 var divisibleFailureMonkey = line.Substring(line.LastIndexOf(" ") + 1);
@@ -131,7 +127,7 @@ List<Monkey> ParseMonkeys(string fileName)
                     ItemsTouched = monkeyItems.Count
                 };
                 monkeys.Add(monkey);
-                
+
                 Console.WriteLine(monkey.ToString());
             }
 
@@ -144,8 +140,8 @@ List<Monkey> ParseMonkeys(string fileName)
 
 public class Monkey
 {
-    [Key]
-    public int Id { get; set; }
+    [Key] public int Id { get; set; }
+
     public List<int> CurrentItems { get; set; }
     public int ItemsTouched { get; set; }
     public char WorryOperation { get; set; }
